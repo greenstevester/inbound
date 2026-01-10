@@ -141,33 +141,44 @@ export const createDomain = new Elysia().post(
       }
     }
 
-    // Check Autumn domain limits
-    console.log("🔍 Checking domain limits with Autumn");
-    const { data: domainCheck, error: domainCheckError } = await autumn.check({
-      customer_id: userId,
-      feature_id: "domains",
-    });
+    // Check Autumn domain limits (skip in development without Autumn keys)
+    const isDevMode = process.env.NODE_ENV === "development";
+    let domainCheck: { allowed: boolean; balance?: number; unlimited: boolean } = {
+      allowed: true,
+      unlimited: true,
+    };
 
-    if (domainCheckError) {
-      console.error("❌ Autumn domain check error:", domainCheckError);
-      set.status = 500;
-      return { error: "Failed to check domain limits" };
+    if (isDevMode && !process.env.AUTUMN_SECRET_KEY) {
+      console.log("⚠️ [DEV MODE] Skipping Autumn domain limits check - no AUTUMN_SECRET_KEY configured");
+    } else {
+      console.log("🔍 Checking domain limits with Autumn");
+      const { data: autumnResult, error: domainCheckError } = await autumn.check({
+        customer_id: userId,
+        feature_id: "domains",
+      });
+
+      if (domainCheckError) {
+        console.error("❌ Autumn domain check error:", domainCheckError);
+        set.status = 500;
+        return { error: "Failed to check domain limits" };
+      }
+
+      if (!autumnResult?.allowed) {
+        console.log("❌ Domain limit reached for user:", userId);
+        set.status = 403;
+        return {
+          error:
+            "Domain limit reached. Please upgrade your plan to add more domains.",
+        };
+      }
+
+      domainCheck = autumnResult;
+      console.log("✅ Domain limits check passed:", {
+        allowed: domainCheck.allowed,
+        balance: domainCheck.balance,
+        unlimited: domainCheck.unlimited,
+      });
     }
-
-    if (!domainCheck?.allowed) {
-      console.log("❌ Domain limit reached for user:", userId);
-      set.status = 403;
-      return {
-        error:
-          "Domain limit reached. Please upgrade your plan to add more domains.",
-      };
-    }
-
-    console.log("✅ Domain limits check passed:", {
-      allowed: domainCheck.allowed,
-      balance: domainCheck.balance,
-      unlimited: domainCheck.unlimited,
-    });
 
     // Check DNS for conflicts (MX/CNAME records) - non-blocking
     console.log("🔍 Checking DNS records for conflicts");
@@ -457,8 +468,8 @@ export const createDomain = new Elysia().post(
       );
     }
 
-    // Track domain usage with Autumn (only if not unlimited)
-    if (!domainCheck.unlimited) {
+    // Track domain usage with Autumn (only if not unlimited and Autumn is configured)
+    if (!domainCheck.unlimited && process.env.AUTUMN_SECRET_KEY) {
       console.log("📊 Tracking domain usage with Autumn");
       const { error: trackError } = await autumn.track({
         customer_id: userId,
@@ -470,6 +481,8 @@ export const createDomain = new Elysia().post(
         console.error("⚠️ Failed to track domain usage:", trackError);
         // Don't fail the request, just log the warning
       }
+    } else if (isDevMode && !process.env.AUTUMN_SECRET_KEY) {
+      console.log("⚠️ [DEV MODE] Skipping Autumn usage tracking - no AUTUMN_SECRET_KEY configured");
     }
 
     // Format response
