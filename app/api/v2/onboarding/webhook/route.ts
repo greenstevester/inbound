@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Inbound, isInboundWebhook } from '@inboundemail/sdk'
-import type { InboundWebhookPayload } from '@inboundemail/sdk'
+import { Inbound, isInboundWebhook } from 'inboundemail'
+import type { InboundWebhookPayload } from 'inboundemail'
 import { db } from '@/lib/db'
 import { onboardingDemoEmails } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'

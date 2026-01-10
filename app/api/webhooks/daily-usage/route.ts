@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { sql } from "drizzle-orm";
 import DailyUsageSummaryEmail from "@/emails/daily-usage-summary";
 import { render } from "@react-email/render";
-import { Inbound } from "@inboundemail/sdk";
+import { Inbound } from "inboundemail";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { getModel } from "@/lib/ai/provider";

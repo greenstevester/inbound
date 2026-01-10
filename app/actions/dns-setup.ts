@@ -1,7 +1,7 @@
 "use server";
 
 import { render } from "@react-email/components";
-import { Inbound } from "@inboundemail/sdk";
+import { Inbound } from "inboundemail";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import DnsSetupInstructionsEmail from "@/emails/dns-setup-instructions";

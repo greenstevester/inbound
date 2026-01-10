@@ -12,7 +12,7 @@ import type {
 	InboundWebhookPayload,
 	InboundEmailAddress,
 	InboundEmailHeaders,
-} from "@inboundemail/sdk";
+} from "inboundemail";
 
 // Request/Response Types (OpenAPI-compatible)
 const EndpointParamsSchema = t.Object({

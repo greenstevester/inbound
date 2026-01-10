@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Inbound } from '@inboundemail/sdk';
+import { Inbound } from 'inboundemail';
 
 // Server action to submit Vercel OSS Program application
 export async function submitVercelOssApplication(formData: FormData) {

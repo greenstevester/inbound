@@ -3,7 +3,7 @@ import { render } from "@react-email/render";
 import DomainVerifiedEmail from "@/emails/domain-verified";
 import ReputationAlertEmail from "@/emails/reputation-alert";
 import LimitReachedEmail from "@/emails/limit-reached";
-import { Inbound } from "@inboundemail/sdk";
+import { Inbound } from "inboundemail";
 import { redis } from "@/lib/redis";
 
 // Initialize Resend client

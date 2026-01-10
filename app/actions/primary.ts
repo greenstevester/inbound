@@ -3491,7 +3491,7 @@ export async function getEmailVolumeChartData(
 // THREADS WAITLIST
 // ============================================================================
 
-import { Inbound } from "@inboundemail/sdk";
+import { Inbound } from "inboundemail";
 
 const inbound = new Inbound(process.env.INBOUND_API_KEY!);
 

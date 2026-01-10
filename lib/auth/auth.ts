@@ -13,7 +13,7 @@ import Stripe from "stripe";
 import * as schema from "../db/schema";
 import { nanoid } from "nanoid";
 import { Resend } from "resend";
-import { Inbound } from "@inboundemail/sdk";
+import { Inbound } from "inboundemail";
 import path from "path";
 import fs from "fs";
 import { render } from "@react-email/components";

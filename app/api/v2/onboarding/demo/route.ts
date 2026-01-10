@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Inbound } from '@inboundemail/sdk'
+import { Inbound } from 'inboundemail'
 import { validateRequest } from '../../../v2/helper/main'
 import { db } from '@/lib/db'
 import { onboardingDemoEmails, sentEmails } from '@/lib/db/schema'

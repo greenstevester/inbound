@@ -15,7 +15,7 @@ import type {
 	InboundWebhookPayload,
 	InboundEmailAddress,
 	InboundEmailHeaders,
-} from "@inboundemail/sdk";
+} from "inboundemail";
 
 /**
  * POST /api/v2/endpoints/{id}/test

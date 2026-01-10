@@ -1,6 +1,6 @@
 'use server'
 
-import { Inbound } from '@inboundemail/sdk'
+import { Inbound } from 'inboundemail'
 
 // Initialize Inbound client
 const inbound = new Inbound(process.env.INBOUND_API_KEY!)
