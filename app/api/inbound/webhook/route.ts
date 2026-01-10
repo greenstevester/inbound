@@ -133,6 +133,13 @@ async function checkAndTrackInboundTrigger(userId: string, recipient: string): P
     return { allowed: true }
   }
 
+  // Skip Autumn checks in development mode without Autumn configuration
+  const isDevMode = process.env.NODE_ENV === 'development'
+  if (isDevMode && !process.env.AUTUMN_SECRET_KEY) {
+    console.log(`⚠️ [DEV MODE] Skipping Autumn inbound trigger check for ${recipient} - no AUTUMN_SECRET_KEY configured`)
+    return { allowed: true }
+  }
+
   try {
     // Check if user can use inbound triggers
     const { data: triggerCheck, error: triggerCheckError } = await autumn.check({
